@@ -11,7 +11,7 @@ from django.conf.urls.static import static
 from django.http import HttpResponse
 from django.views.generic import TemplateView
 from django.views.generic.base import RedirectView
-from main.views import feed, search, popular, rating, sekitar, getmaps, andreyongz, offline, getculinary, getrating, getrating, hashtag, detail
+from main.views import feed, search, popular, rating, andreyongz, offline, getculinary, getrating, getrating, hashtag, detail
 
 
 urlpatterns = [
@@ -19,8 +19,6 @@ urlpatterns = [
     path('search/keyword', search, name='search'),
     path('populer', popular, name='popular'),
     path('rating', rating, name='rating'),
-    path('sekitar', sekitar, name='sekitar'),
-    path('getmaps', getmaps, name='getmaps'),
     path('andreyongz/', andreyongz, name='andreyongz'),
     path('offline/', offline, name='offline'),
     path('getculinary/', getculinary, name='getculinary'),
