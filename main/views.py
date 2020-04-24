@@ -179,54 +179,6 @@ def hashtag(request, slug):
                   'main/hashtag.html',
                   context)
 
-
-def check_station(st):
-    if st:
-        return st[:96]
-    else:
-        return ''
-
-
-def getmaps(request):
-    data = []
-    try:
-        cache_key = "getmaps"
-        cache_time = 86400
-        data = cache.get(cache_key)
-        if not data:
-            data = CulinaryPlace.objects.filter(lat_lang__isnull=False)
-        cache.set(cache_key, data, cache_time)
-    except BaseException:
-        data = []
-
-    suggestions = simplejson.dumps(
-        [
-            {
-                'type_point': i.name,
-                'location_latitude': i.get_lat(),
-                'location_longitude': i.get_long(),
-                'map_image_url': "http://%s/hobimakanbanyuwangi%s" % (request.META.get('HTTP_HOST'),
-                                                                      i.get_logo()),
-                'name_point': i.name,
-                'description_point': check_station(
-                    i.get_caption),
-                'address': i.address,
-                'hours': i.get_hours(),
-                'url_detail': '/kuliner/%s' % i.slug} for i in data])
-
-    return HttpResponse(suggestions, content_type='application/json')
-
-
-def sekitar(request):
-    context = dict(
-        sekitar=True,
-    )
-
-    return render(request,
-                  'main/sekitar.html',
-                  context)
-
-
 def rating(request):
     qs = CulinaryPlace.objects.values(
         'id',
