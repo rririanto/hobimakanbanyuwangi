@@ -1,0 +1,21 @@
+{% load thumbnail %}
+{% load admin_tags %}
+
+{% if page_objects %}
+         {% for i in page_objects %}
+                     <div class="col-12 col-md-6 col-lg-4 portfolio-2" data-shuffle="item" data-groups="webapp">
+                        <p><a href="{% url 'detail' i.slug %}" data-href="{% thumbnail i.photo '600x437' crop="center" as im %}{{im.url}}{% endthumbnail %}" class="progressive replace"><img src="{% thumbnail i.photo '32x32' crop="center" as im %}{{im.url}}{% endthumbnail %}" class="preview" alt="Hobimakan.banyuwangi Photo {{i.name}}"></a></p>
+                        <p><strong>{{i.name}}</strong><br>
+                                    {% if i.byratings >= 2 %}
+                  <span><i class="fa fa-star"></i>
+                  </span> <small>{{i.byratings|remove_zero}}</small>&nbsp;&nbsp;
+                  {% endif %}
+                  <span style="width: 20px;height: 20px;"><i class="fa fa-comments-o"></i>
+                  </span> <small>{{i.cmcount}}</small>&nbsp;&nbsp;
+                  <span><i class="fa fa-heart-o"></i>
+                  </span> <small>{{i.likecount}}</small>
+                        </p>
+                     </div>
+
+         {% endfor %}
+{% endif %}

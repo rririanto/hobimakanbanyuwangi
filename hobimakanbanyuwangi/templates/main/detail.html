@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+{% load admin_tags %}
+
+{% block meta %}
+<title>
+   {{object.get_name}} - Referensi Kuliner Banyuwangi - @Hobimakanbanyuwangi 
+</title>
+<meta name="keywords" content="{{object.get_name}}, {% for tag in object.tags.all %}{{tag.name|lower}}{% if forloop.last %}{% else %}, {% endif %}{% endfor %}
+   " />
+<meta name="robots" content="index, follow" />
+<meta name="revisit-after" content="2 days" />
+<meta property="og:title" content="{{object.get_name}} - Referensi Kuliner Banyuwangi - @Hobimakanbanyuwangi" />
+<meta property="og:description" content="website yang memudahkan kamu untuk mendapatkan informasi & melakukan aktifitas kuliner di kota Banyuwangi." />
+<meta property="og:url" content="https://hobimakanbanyuwangi.com{% url 'detail' object.slug %}" />
+<meta property="og:type" content="article" />
+<meta property="og:image" content="https://hobimakanbanyuwangi.com{% if object.photo %}{{object.photo.url}}{% endif %}" />
+<meta property="og:site_name" content="Hobimakanbanyuwangi" />
+{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="/static/opt/minimal-detail.min.css">
+{% endblock %}
+{% block header %}
+<!-- Header -->
+<header class="header header-inverse bg-fixed" style="background-image: url({% if object.photo %}{{object.photo.url}}{% endif %})" data-overlay="8">
+   <div class="container text-center">
+      <div class="row">
+         <div class="col-12 col-lg-8 offset-lg-2">
+            <h1>{{object.name}}</h1>
+            <p class="fs-20">
+               {% if object.byratings >= 2 %}
+               <span><i class="fa fa-star"></i>
+               </span>{{object.byratings|remove_zero}}&nbsp;&nbsp;
+               {% endif %}
+               
+               <span><i class="fa fa-comments-o"></i>
+               </span> {{object.cmcount}}&nbsp;&nbsp;
+               <span><i class="fa fa-heart-o"></i>
+               </span> {{object.likecount}}
+            </p>
+            <p class="fs-20"><i class="fa fa-map-marker mr-8"></i> {{object.address}}</p>
+            {% if object.lat_lang %}
+            <hr class="w-50 ">
+            <a class="btn btn-xl btn-round btn-white w-200" href="{{object.get_map_url}}">Buka Maps</a>
+            {% else %}
+            <a class="btn btn-xl btn-round btn-white w-200" href="tel:{{object.phone|cut:" "}}">Telfon</a> 
+            {% endif %}
+         </div>
+      </div>
+   </div>
+</header>
+<!-- END Header -->
+{% endblock %}
+{% block content %}
+
+<section class="section bb-1">
+   <div class="container">
+      <div class="row">
+         <div class="col-12 col-md-8">
+            {% if  object.culinary_file.all|length >= 1 %}
+            {% if object.typename not in type_media %}
+            <div class="swiper-container swiper-button-box" style="margin-top: -10px;" data-space-between="20">
+               <div class="swiper-wrapper">
+                  {% for i in object.culinary_file.all %}
+                  <div class="swiper-slide"><img src="{{i.media.url}}" alt="..."></div>
+                  {% endfor %}
+               </div>
+               <div class="swiper-button-prev" style="margin-top: -300px;"></div>
+               <div class="swiper-button-next" style="margin-top: -300px;"></div>
+            </div>
+            {% else %}
+            {% for i in object.culinary_file.all %}
+            {% if i.get_ext == ".mp4" %}
+            <video controls style="max-width:100%">
+                <source src="{{i.media.url}}" type=video/mp4></source>
+            </video>
+
+            <br>
+            {% else %}
+            <img src="{{i.media.url}}" alt="Hobimakanbanyuwangi Kuliner {{object.name}} ">
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+            {% else %}
+            {% if object.photo %}
+            <img src="{{object.photo.url}}" alt="Hobimakanbanyuwangi Kuliner {{object.name}} ">
+            {% endif %}
+            {% endif %}
+         </div>
+         <div class="col-12 col-md-4">
+            <h5>{{object.name}}</h5>
+            <p>{{object.get_caption|linebreaksbr }}</p>
+            <p class="fs-19">
+               {% if object.byratings >= 2 %}
+               <span><i class="fa fa-star"></i>
+               </span><small>{{object.byratings|remove_zero}}/5</small>&nbsp;&nbsp;
+               {% endif %}
+               <span><i class="fa fa-comments-o"></i>
+               </span> <small>{{object.cmcount}}</small>&nbsp;&nbsp;
+               <span><i class="fa fa-heart-o"></i>
+               </span> <small>{{object.likecount}}</small>
+            </p>
+            <ul class="project-details">
+               {% if object.ratings|length > 6 %}
+               <li>
+                  <strong>Info Rating</strong>
+                  {{object.ratings}}
+               </li>
+               {% endif %}
+
+               {% if object.priceinfo %} 
+               <li>
+                  <strong>Info Harga</strong>
+                  {{object.priceinfo}}
+               </li>
+               {% endif %}
+               {% if object.phone %} 
+               <li>
+                  <strong>Telfon</strong>
+                  <a href="tel:{{object.phone|cut:" "}}">{{object.phone}}</a>
+               </li>
+               {% endif %}
+               {% if object.hours %}
+               <li>
+                  <strong>Waktu Buka</strong>
+                  {{object.hours}}
+               </li>
+               {% endif %}
+               {% if object.igaccount %}
+               <li>
+                  <strong>Akun Instagram</strong>
+                  <a href="https://www.instagram.com/{{object.igaccount|cut:"@"|cut:" "}}/">{{object.igaccount}}</a>
+               </li>
+               {% endif %}
+               {% if object.address %}
+               <li>
+                  <strong>Alamat</strong>
+                  <a href="#">{{object.address}}</a>
+               </li>
+               {% endif %}
+               <li>
+                  <strong>Hastag</strong>
+                  <div class="gap-multiline-items-1">
+                     {% for i in object.tags.all %}
+                     {% if i.name not in nexclude %}
+                     <a class="badge badge-pill badge-default" href="/hashtag/{{i.slug}}">{{i.name}}</a>
+                     {% endif %}
+                     {% endfor %}
+                  </div>
+               </li>
+               {% if object.shortcode %}
+               <li>
+                  <strong>Lihat Di Instagram</strong>
+                  <a href="https://www.instagram.com/p/{{object.shortcode}}">@hobimakan.banyuwangi</a>
+               </li>
+               {% endif %}
+            </ul>
+         </div>
+      </div>
+   </div>
+</section>
+
+<section class="section">
+   <div class="container">
+      <h5 class="mb-20">Kuliner Sejenis</h5>
+      <div class="row gap-y gap-2">
+         {% for i in related %}
+         <div class="col-6 col-lg-3">
+            <a class="portfolio-1" href="{% url 'detail' i.slug %}">
+               {% thumbnail i.photo "600x437" crop="center" as im %}
+               <img src="{{im.url}}" alt="Hobimakan.banyuwangi Photo {{i.name}}">
+               {% endthumbnail %}
+               
+               <div class="portfolio-details">
+                  <h5>{{i.name}}</h5>
+                  <p>
+                  {% if i.byratings >= 2 %}
+                  <span><i class="fa fa-star"></i>
+                  </span> <small>{{i.byratings|remove_zero}}</small>&nbsp;&nbsp;
+                  {% endif %}
+                     <span><i class="fa fa-comments-o"></i>
+                     </span>&nbsp;{{i.cmcount}}&nbsp;&nbsp;
+                     <span><i class="fa fa-heart-o"></i>
+                     </span>&nbsp;{{i.likecount}}
+                  </p>
+               </div>
+            </a>
+         </div>
+         {% endfor %}
+      </div>
+   </div>
+</section>
+{% endblock %}

@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+
+{% block css %}
+<link rel="stylesheet" href="/static/css/owl.carousel.css">
+<link rel="stylesheet" href="/static/css/owl.theme.css">
+<link rel="stylesheet" href="/static/plugins/photoswip/photoswipe.css">
+<link rel="stylesheet" href="/static/plugins/photoswip/default-skin/default-skin.css">
+<style>
+   .owl-carousel {
+     margin-left:-41px;
+     width: 771px;
+   }
+   
+   .owl-carousel li {
+   list-style:none;
+   }
+   .owl-carousel li img {
+   padding: 1px;
+   }
+   .owl-carousel li img:hover {
+   transform:scale(.98, .98);
+   }
+   .owl-carousel li img:active {
+   transform:scale(.96, .96);
+   }
+   @media only screen and (max-width: 960px) {
+   .container {
+   width:auto;
+   padding-right:15px;
+   padding-left:15px;
+   }
+   .owl-carousel li {
+   padding-right:5px;
+   padding-left:5px;
+   }
+   }
+</style>
+{% endblock %}
+{% block header %}
+<!-- Header -->
+<header class="header header-inverse bg-fixed" style="background-image: url({{object.photo.url}})" data-overlay="8">
+   <div class="container text-center">
+      <div class="row">
+         <div class="col-12 col-lg-8 offset-lg-2">
+            <h1>{{object.name}}</h1>
+            <p class="fs-20"><span><i class="fa fa-star"></i>
+               </span> {{object.ratings}}&nbsp;&nbsp;
+               <span ><i class="fa fa-comments-o"></i>
+               </span> {{object.cmcount}}&nbsp;&nbsp;
+               <span><i class="fa fa-heart-o"></i>
+               </span> {{object.likecount}}
+            </p>
+            <p class="fs-20"><i class="fa fa-map-marker mr-8"></i> {{object.address}}</p>
+            <hr class="w-50 ">
+            <a class="btn btn-xl btn-round btn-white w-200" href="#" data-scrollto="section-apply">Buka Maps</a>
+         </div>
+      </div>
+   </div>
+</header>
+<!-- END Header -->
+{% endblock %}
+{% block content %}
+<!--
+   |‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
+   | Project details
+   |‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
+   !-->
+<section class="section bb-1">
+   <div class="container">
+      <div class="row">
+         <div class="col-12 col-md-8">
+            <img src="{{object.photo.url}}" alt="project image">
+            <ul class="owl-carousel">
+               {% if } 
+               <li><a href="http://webdesign-dackel.com/demo/owlcarousel-photoswipe/images/photo10_lg.jpg" data-size="960x640" data-title="タイトル1"><img src="http://webdesign-dackel.com/demo/owlcarousel-photoswipe/images/photo10.jpg" alt="写真10"></a></li>
+               <li><a href="http://webdesign-dackel.com/demo/owlcarousel-photoswipe/images/photo11_lg.jpg" data-size="960x640" data-title="タイトル2"><img src="http://webdesign-dackel.com/demo/owlcarousel-photoswipe/images/photo11.jpg" alt="写真11"></a></li>
+               <li><a href="http://webdesign-dackel.com/demo/owlcarousel-photoswipe/images/photo12_lg.jpg" data-size="960x640" data-title="タイトル3"><img src="http://webdesign-dackel.com/demo/owlcarousel-photoswipe/images/photo12.jpg" alt="写真12"></a></li>
+               <li><a href="http://webdesign-dackel.com/demo/owlcarousel-photoswipe/images/photo13_lg.jpg" data-size="960x640" data-title="タイトル4"><img src="http://webdesign-dackel.com/demo/owlcarousel-photoswipe/images/photo13.jpg" alt="写真13"></a></li>
+               <li><a href="http://webdesign-dackel.com/demo/owlcarousel-photoswipe/images/photo14_lg.jpg" data-size="960x640" data-title="タイトル5"><img src="http://webdesign-dackel.com/demo/owlcarousel-photoswipe/images/photo14.jpg" alt="写真14"></a></li>
+               <li><a href="http://webdesign-dackel.com/demo/owlcarousel-photoswipe/images/photo15_lg.jpg" data-size="960x640" data-title="タイトル6"><img src="http://webdesign-dackel.com/demo/owlcarousel-photoswipe/images/photo15.jpg" alt="写真15"></a></li>
+            </ul>
+         </div>
+         <div class="col-12 col-md-4">
+            <h5>{{object.name}}</h5>
+            <p>{{object.get_caption|linebreaksbr }}</p>
+            <p><span><i class="fa fa-star"></i>
+               </span> <small>{{object.ratings}}</small>&nbsp;&nbsp;
+               <span style="width: 20px;height: 20px;"><i class="fa fa-comments-o"></i>
+               </span> <small>{{object.cmcount}}</small>&nbsp;&nbsp;
+               <span><i class="fa fa-heart-o"></i>
+               </span> <small>{{object.likecount}}</small>
+            </p>
+            <ul class="project-details">
+               {% if object.priceinfo %} 
+               <li>
+                  <strong>Info Harga</strong>
+                  {{object.priceinfo}}
+               </li>
+               {% endif %}
+               {% if object.phone %} 
+               <li>
+                  <strong>Telfon</strong>
+                  {{object.phone}}
+               </li>
+               {% endif %}
+               {% if object.hours %}
+               <li>
+                  <strong>Waktu Buka</strong>
+                  {{object.hours}}
+               </li>
+               {% endif %}
+               {% if object.igaccount %}
+               <li>
+                  <strong>Akun Instagram</strong>
+                  <a href="#">{{object.igaccount}}</a>
+               </li>
+               {% endif %}
+               {% if object.address %}
+               <li>
+                  <strong>Address</strong>
+                  <a href="#">{{object.address}}</a>
+               </li>
+               {% endif %}
+               <li>
+                  <strong>Tags</strong>
+                  <div class="gap-multiline-items-1">
+                     {% for i in object.tags.all %}
+                     <a class="badge badge-pill badge-default" href="{{i.slug}}">{{i.name}}</a>
+                     {% endfor %}
+                  </div>
+               </li>
+            </ul>
+         </div>
+      </div>
+   </div>
+</section>
+<!--
+   |‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
+   | Related projects
+   |‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
+   !-->
+<section class="section">
+   <div class="container">
+      <h5 class="mb-20">Related Projects</h5>
+      <div class="row gap-y gap-2">
+         {% for i in related %}
+         <div class="col-6 col-lg-3">
+            <a class="portfolio-1" href="{% url 'detail' i.slug %}">
+               <img src="{% if i.photo %}{% thumbnail i.photo 600x437 crop %}{% endif %}" alt="Hobimakan.banyuwangi Photo {{i.name}}">
+               <div class="portfolio-details">
+                  <h5>{{i.name}}</h5>
+                  <p><span><i class="fa fa-star"></i>
+                     </span>{{i.ratings}}&nbsp;&nbsp;
+                     <span><i class="fa fa-comments-o"></i>
+                     </span>{{i.cmcount}}&nbsp;&nbsp;
+                     <span><i class="fa fa-heart-o"></i>
+                     </span>{{i.likecount}}
+                  </p>
+               </div>
+            </a>
+         </div>
+         {% endfor %}
+      </div>
+   </div>
+</section>
+{% endblock %}
+{% block js %}
+<script src="/static/js/owl.carousel.min.js"></script> 
+<script src="/static/plugins/photoswip/photoswipe.min.js"></script> 
+<script src="/static/plugins/photoswip/photoswipe-ui-default.min.js"></script> 
+<script src="/static/js/appgallery.js"></script> 
+{% endblock %}

@@ -1,0 +1,74 @@
+{% load compress %}
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8">
+      
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="alternate" href="https://hobimakanbanyuwangi.com/" hreflang="id-id" />
+      <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png">
+      <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png">
+      <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png">
+      <link rel="manifest" href="/static/manifest.json">
+      <link rel="mask-icon" href="/static/icons/safari-pinned-tab.svg" color="#5bbad5">
+      <link rel="shortcut icon" href="/static/icons/favicon.ico">
+      <meta name="msapplication-starturl" content="/">
+      <meta name="msapplication-TileColor" content="#ffc40d">
+      <meta name="msapplication-TileImage" content="/static/icons/mstile-144x144.png">
+      <meta name="msapplication-config" content="browserconfig.xml">
+      <meta name="theme-color" content="#ffffff">
+      {% block meta %}
+      <meta name="description" content="website yang memudahkan kamu untuk mendapatkan informasi & melakukan aktifitas kuliner di kota Banyuwangi.">
+      <meta name="keywords" content="kuliner, hobimakanbanyuwangi, banyuwangifoodies, indofoodgram, instafood, bakso, banyuwangi, foodgramers, foodiesbanyuwangi, kulinerbanyuwangi, banyuwangikuliner">
+      <meta property="og:locale" content="in_ID" />
+      <meta property="og:type" content="article" />
+      <meta property="og:title" content="Hobimakanbanyuwangi - Referensi Kuliner Banyuwangi - @Hobimakan.banyuwangi" />
+      <meta property="og:description" content="website yang memudahkan kamu untuk mendapatkan informasi & melakukan aktifitas kuliner di kota Banyuwangi." />
+      <meta property="og:url" content="https://hobimakanbanyuwangi.com/" />
+      <meta property="og:image" content="http://image.jpg" />
+      <meta property="og:site_name" content="Hobimakanbanyuwangi" />
+      <title>Hobimakanbanyuwangi - Referensi Kuliner Banyuwangi - @Hobimakan.banyuwangi</title>
+      {% endblock %}
+      <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,800|Dosis:300,600">
+      <link rel="stylesheet" href="/static/assets/css/core.min.css">
+      <link rel="stylesheet" href="/static/assets/css/thesaas.min.css">
+      <link rel="stylesheet" href="/static/assets/css/style.css">
+      <link rel="stylesheet" href="/static/assets/css/custom.css">
+      <link rel="stylesheet" href="/static/css/progressive-image.min.css">
+      {% block css %}{% endblock %}
+   </head>
+   <body class="thesaas-sections-split body-scrolled">
+      <!-- Topbar -->
+      {%  include "navbar.html"  %}
+      <!-- END Topbar -->
+      <!-- Main container -->
+      {% block header %}{% endblock %}
+      <main class="main-content">
+         {% block content %}
+         {% endblock %}
+      </main>
+      <!-- END Main container -->
+      <!-- Footer -->
+      {%  include "footer.html"  %}
+      <!-- END Footer -->
+      <!-- Scripts -->
+      <a class="scroll-top" href="#"><i class="fa fa-angle-up"></i></a>
+      <script src="/static/assets/js/core.min.js"></script>
+      <script src="/static/assets/js/thesaas.js"></script>
+      <script src="/static/assets/js/jquery_time.min.js"></script>
+      <script src="/static/js/progressive-image.min.js"></script>
+      <script src="/static/js/killswitch.js"></script>
+      <script src="/static/js/main.js"></script>
+      {% block js %}{% endblock %}
+      {% block maps %}{% endblock %}
+      <!-- Google Analytics -->
+      <script>
+       window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+        ga('create', 'UA-111641560-1', 'auto');
+        ga('send', 'pageview');
+      </script>
+      <script async src='https://www.google-analytics.com/analytics.js'></script>
+      <!-- End Google Analytics -->
+
+   </body>
+</html>

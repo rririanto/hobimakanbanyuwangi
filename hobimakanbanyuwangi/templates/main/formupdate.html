@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+
+{% block css %}
+<link rel="stylesheet" href="/static/opt/minimal-admin.min.css">
+{% endblock %}
+{% block content %}
+<section class="section py-0">
+   <div class="row no-gutters">
+      <div class="col-md-12 align-self-center py-90">
+
+         <h5 class="text-center">"Food is a passion, Food is love."</h5>
+         <br>
+         <div class="col-12 col-md-4 offset-md-4">
+            <button class="btn btn-lg btn-block btn-primary btn-round updateculinary" name="savegeo" type="button">
+               Click to Update Kuliner
+            </button><br>
+            <center><div id="ajax-panel"></div></center>
+
+         </div>
+         <br>
+         <div class="col-12 col-md-4 offset-md-4">
+            <button class="btn btn-lg btn-block btn-primary btn-round updatelike" name="savegeo" type="button">
+               Click to Update Comment & Like
+            </button><br>
+            <center><div id="ajax-panel2"></div></center>
+
+         </div>
+
+      </div>
+   </div>
+</section><br><br><br><br><br>
+{% endblock %}
+{% block js %}
+<script>
+   $(function() {   
+       $(".updateculinary").on("click", function() {
+          $.ajax({
+             type: 'GET',
+             url: "{% url 'getculinary' %}",
+             data: {csrfmiddlewaretoken:"{{csrf_token}}"},
+             beforeSend:function(){
+               $('#ajax-panel').html('<div class="loading"><img src="/static/AjaxLoader.gif" alt="Loading..." /></div>');
+               $('button[name=savegeo]').prop('disabled', true);
+             },
+             success:function(data){
+               $('button[name=savegeo]').prop('disabled', false); 
+               $("#ajax-panel").html('<div class="alert alert-success" role="alert"><strong>Well done!</strong> You successfully update the culinary</div>'); 
+             }
+          });
+   
+       })    
+   
+   
+   });
+   
+   $(function() {   
+       $(".updatelike").on("click", function() {
+          $.ajax({
+             type: 'GET',
+             url: "{% url 'getrating' %}",
+             data: {csrfmiddlewaretoken:"{{csrf_token}}"},
+             beforeSend:function(){
+               $('#ajax-panel2').html('<div class="loading"><img src="/static/AjaxLoader.gif" alt="Loading..." /></div>');
+               $('button[name=saverating]').prop('disabled', true);
+             },
+             success:function(data){
+                  $("#ajax-panel2").html('<div class="alert alert-success" role="alert"><strong>Well done!</strong> You successfully update the culinary</div>');
+             }
+          });
+   
+       })    
+   
+   
+   });
+   
+</script>
+
+{% endblock %}

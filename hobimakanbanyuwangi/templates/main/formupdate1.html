@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+
+{% block css %}
+<link rel="stylesheet" href="/static/css/chosen.css">
+{% endblock %}
+{% block content %}
+<section class="section py-0">
+   <div class="row no-gutters">
+      <div class="col-12 col-md-6 align-self-center py-70">
+         <h5 class="text-center">Update Map Kuliner</h5>
+         <br>
+         <form class="row form-round" method="POST" id="formgeo">
+            {% csrf_token %}
+            <input name="lat" type="hidden" id="mapLat" class="input-xlarge">
+            <input name="lng" type="hidden" id="mapLng" class="input-xlarge">
+
+            <div class="col-12 col-md-10 offset-md-1 bg-gray px-30 py-45">
+               <div class="form-group">
+                  <label>Pilih Lokasi <a href="javascript:void(0)" class="updateculinary">Update jika lokasi belum terlist</a> <div id="ajax-panel"></div></label>  
+                  <select id="single" name="single" class="form-control form-control-lg chosen-select">
+                     <option value="select">Pilih Lokasi</option>
+                     {% for i in culinarys %}
+                     <option value="{{i.name}}">{{i.name}}</option>
+                     {% endfor %}
+                  </select>
+               </div>
+               <label>Masukan Lat, Long</label>  
+               <div class="input-group">
+                  <input id="geocomplete" class="form-control form-control-lg" type="text" name="lat_lng" placeholder="contoh: 82.453, 1234.44">                  
+                  <span class="input-group-btn">
+                  <button class="btn btn-primary btn-round" id="find" type="button">Locate</button>
+                  </span>
+               </div>
+               <div class="form-group">
+                   
+               </div><div id="statusresp"></div>
+               <button class="btn btn-lg btn-block btn-primary btn-round" name="savegeo" type="submit">Simpan</button>
+            </div>
+         </form>
+      </div>
+      <div class="col-12 col-md-6">
+         <div style="min-height:520px;" data-provide="map" id="map" data-style="light"></div>
+      </div>
+   </div>
+</section>
+{% endblock %}
+{% block js %}
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZgLCa--0AA4de9QRIlSc9E5n-GMkMC6U&sensor=false&libraries=places"></script>
+<script src="/static/js/jquery.geocomplete.min.js"></script>
+<script src="/static/js/chosen.jquery.js"></script>
+<script src="/static/js/jquery.form.min.js"></script>
+<script>
+   $(function() {
+   var config = {
+       '.chosen-select'           : {},
+       '.chosen-select-deselect'  : { allow_single_deselect: true },
+       '.chosen-select-no-single' : { disable_search_threshold: 10 },
+       '.chosen-select-no-results': { no_results_text: 'Oops, nothing found!' },
+       '.chosen-select-rtl'       : { rtl: true },
+       '.chosen-select-width'     : { width: '95%' }
+   }
+   for (var selector in config) {
+   $(selector).chosen(config[selector]);
+   }
+   
+       {% if get_place.lang_lat %}
+       var center = new google.maps.LatLng({{get_place.lang_lat}});
+       $("#geocomplete").geocomplete({
+           map: "#map",
+           details: "form ",
+           location: center,
+           mapOptions: {
+             center: center
+           },
+           markerOptions: {
+               draggable: true
+           },
+           types: ["geocode", "establishment"],
+           country: 'id'
+   
+       });
+       var map = $("#geocomplete").geocomplete("map")
+   
+       map.setCenter(center);
+       map.setZoom(17); 
+       {% else %}
+       var center = new google.maps.LatLng(-8.219094, 114.369142);
+       $("#geocomplete").geocomplete({
+           map: "#map",
+           details: "form ",
+           location: center,
+           mapOptions: {
+             center: center
+           },
+           markerOptions: {
+               draggable: true
+           },
+           types: ["geocode", "establishment"],
+           country: 'id'
+   
+       });
+       var map = $("#geocomplete").geocomplete("map")
+   
+       map.setCenter(center);
+       map.setZoom(15); 
+       {% endif %}
+   
+       $("#geocomplete").bind("geocode:dragged", function(event, latLng) {
+           $("input[name=lat]").val(latLng.lat());
+           $("input[name=lng]").val(latLng.lng());
+           $("input[name=lat_lng]").val(latLng.lat() + ',' + latLng.lng());
+           $("#reset").show();
+       });
+   
+   
+       $("#reset").click(function() {
+           $("#geocomplete").geocomplete("resetMarker");
+           $("#reset").hide();
+           return false;
+       });
+   
+       //
+       $("#single").on("change", function() {
+          $.ajax({
+             type: 'POST',
+             url: "{% url 'getculinary' %}",
+             data: {name: $(this).val(), csrfmiddlewaretoken:"{{csrf_token}}"},
+             success:function(data){
+               if (data != 'None') {
+                  $("input[name=lat_lng]").val(data);
+                  $("#find").click();
+               } else {
+                  $("input[name=lat_lng]").val('-8.219094, 114.369142');
+                  $("#find").click();
+            
+               }
+             }
+          });
+   
+       });
+   
+       $(".updateculinary").on("click", function() {
+          $.ajax({
+             type: 'GET',
+             url: "{% url 'getculinary' %}",
+             data: {csrfmiddlewaretoken:"{{csrf_token}}"},
+             beforeSend:function(){
+               $('#ajax-panel').html('<div class="loading"><img src="/static/AjaxLoader.gif" alt="Loading..." /></div>');
+               $('button[name=savegeo]').prop('disabled', true);
+               $('#find, #geocomplete').prop('disabled', true);
+               $(".chosen-select").attr('disabled', true).trigger("chosen:updated")
+               $('.updateculinary').hide()
+               
+             },
+             success:function(data){
+               setTimeout(function(){
+                   location.reload();
+               }, 60000);  
+             }
+          });
+
+       })    
+
+
+       $("#find").on("click", function() {
+           var input = $("#geocomplete").val()
+           var latlng_regex = /^(\-?\d+(\.\d+)?),\s*(\-?\d+(\.\d+)?)$/;
+           if (input.match(latlng_regex)){
+               $("#reset").click();
+               var geo_split = input.split(',') 
+               //set latlng
+               var center = new google.maps.LatLng(geo_split[0],geo_split[1]);
+               //set position maps
+               var map = $("#geocomplete").geocomplete("map")
+               map.setCenter(center);
+               map.setZoom(16); 
+               //set markers
+               var marker = $("#geocomplete").geocomplete("marker");
+               marker.setPosition(center);
+               $("input[name=lat]").val(geo_split[0]);
+               $("input[name=lng]").val(geo_split[1]);
+           } else { 
+             $("#geocomplete").trigger("geocode");
+           }
+       })
+   });
+   
+  $(document).ready(function() {
+    var options = {
+        beforeSubmit: function() {
+            $('button[name=savegeo]').html('loading...');
+            $('button[name=savegeo]').prop('disabled', true);
+        },
+        success: showResponse,
+        url: "{% url 'andreyongz' %}",
+    };
+   
+    $('#formgeo').submit(function() {
+        $(this).ajaxSubmit(options);
+        return false;
+    });
+   
+   });
+   
+   // post-submit callback
+   function showResponse(responseText, statusText, xhr, $form) {
+    if (responseText == 'true') {
+        $("#statusresp").html('<div class="alert alert-success" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span>×</span></button>Sukses Di Simpan!</div>')
+        $('button[name=savegeo]').html('Simpan');
+        $('button[name=savegeo]').prop('disabled', false);        
+    } else if (responseText == 'err') {
+        $("#statusresp").html('<div class="alert alert-danger" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span>×</span></button>Oops terjadi kesalahan, coba lagi yah!</div>')
+        $('button[name=savegeo]').html('Simpan');
+        $('button[name=savegeo]').prop('disabled', false);
+    } 
+   }
+   
+</script>
+{% endblock %}

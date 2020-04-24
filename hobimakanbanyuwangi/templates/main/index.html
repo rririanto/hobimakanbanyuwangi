@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+{% load admin_tags %}
+
+{% block content %}
+<section class="section">
+   <div class="container h-overflow">
+      <header class="section-header">
+         <h2>Referensi Kuliner Banyuwangi <a href="#">#1</a></h2>
+         <p class="lead">Temukan kuliner favorit di banyuwangi dengan mudah.</p>
+         <hr>
+         <div class="col-12 col-md-8 offset-md-2">
+            <p>
+            <form class="form-round py-30" method="get" action="{% url 'search' %}">
+               <div class="input-group">
+                  <input type="text" name="q" {% if keyword %}value="{{keyword}}" {% endif %}class="form-control form-control-lg" placeholder="Mau makan apa ?">
+                  <span class="input-group-btn">
+                  <button class="btn btn-primary" type="submit">Cari</button>
+                  </span>
+               </div>
+            </form>
+            </p>
+         </div>
+      </header>
+      <div>
+         <div class="text-center gap-multiline-items-2">
+            <button class="btn btn-w-md btn-outline btn-round btn-info btn-act {% if terbaru %}active{% endif %}">terbaru</button>
+            <button class="btn btn-w-md btn-outline btn-round btn-info btn-act {% if rating %}active{% endif %}">rating</button>
+            <button class="btn btn-w-md btn-outline btn-round btn-info btn-act {% if popular %}active{% endif %}">populer</button>
+            <button class="btn btn-w-md btn-outline btn-round btn-info btn-act {% if sekitar %}active{% endif %}">sekitar</button>
+         </div>
+         <br><br>
+         <div class="row gap-y text-center postwrapper">
+            {% for i in object_list %}
+            <div class="col-12 col-md-6 col-lg-4 portfolio-2">
+               <p><a href="{% url 'detail' i.slug %}" data-href="{% thumbnail i.photo '600x437' crop="center" as im %}{{im.url}}{% endthumbnail %}" class="progressive replace"><img src="{% thumbnail i.photo '32x32' crop="center" as im %}{{im.url}}{% endthumbnail %}" class="preview" alt="Hobimakan.banyuwangi Photo {{i.name}}"/></a></p>
+               <p><strong>{{i.name}}</strong><br>
+                  {% if i.byratings >= 2 %}
+                  <span><i class="fa fa-star"></i>
+                  </span> <small>{{i.byratings|remove_zero}}</small>&nbsp;&nbsp;
+                  {% endif %}
+                  
+                  <span style="width: 20px;height: 20px;"><i class="fa fa-comments-o"></i>
+                  </span> <small>{{i.cmcount}}</small>&nbsp;&nbsp;
+                  <span><i class="fa fa-heart-o"></i>
+                  </span> <small>{{i.likecount}}</small>
+               </p>
+            </div>
+            {% endfor %}
+         </div>
+      </div>
+      <br><br><br>
+      <div class="text-center">
+         <div class="loadmoreajaxloader" style="display:none;">
+            <center><img src="/static/AjaxLoader.gif" alt="Ajax Loader"/></center>
+         </div>
+         <div id="hsbutn">
+            <a href="javascript:void(0)" class="btn btn-warning btn-round btn-default" id="historyBtn">Tampilkan Lainnya</a>    
+         </div>
+      </div>
+   </div>
+</section>
+      <section class="section">
+        <div class="container h-overflow">
+          <header class="section-header">
+            <small></small>
+            <h2>Jauh Lebih Mudah</h2>
+            <hr>
+            <p class="lead">Website yang memudahkan kamu untuk mendapatkan informasi & melakukan aktifitas kuliner di kota Banyuwangi.</p>
+          </header>
+
+          <div class="row gap-y">
+            
+            <div class="col-12 col-md-6 col-xl-4 feature-1">
+              <p class="feature-icon text-warning"><i class="icon-map"></i></p>
+              <h5 style="">Map</h5>
+              <p>Tak perlu lagi takut tersesat, satu tombol klik dan kamu akan langsung di arahkan ke lokasi kuliner tujuan.</p>
+            </div>
+
+
+            <div class="col-12 col-md-6 col-xl-4 feature-1">
+              <p class="feature-icon text-info"><i class="icon-search"></i></p>
+              <h5>Cari</h5>
+              <p>Kamu bisa lebih mudah mencari Kuliner yang kamu inginkan dari postingan @hobimakan.banyuwangi. Dengan judul, deskripsi maupun kategori hashtag.</p>
+            </div>
+
+
+            <div class="col-12 col-md-6 col-xl-4 feature-1">
+              <p class="feature-icon"><i class="text-danger icon-heart"></i></p>
+              <h5>Rating & Populer</h5>
+              <p>Temukan Kuliner yang punya Rating tertinggi maupun yang paling banyak disukai Folower @hobimakan.banyuwangi.</p>
+            </div>
+
+
+          </div>
+
+        </div>
+
+      </section>
+      <!--
+      |‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
+      | CTA 4
+      |‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
+      !-->
+
+
+      <section class="section section-inverse" style="background-image: url(/static/assets/img/banyuwangi-food_mini.jpg)" data-overlay="7">
+        <div class="container">
+          <div class="row gap-y align-items-center">
+            <div class="col-12 col-md-9 text-center text-md-left">
+              <h4 class="mb-0">{{totalqs}} Kuliner telah kami review! Kamu punya info kuliner ? Yuk Infokan juga ke kami!</h4>
+            </div>
+
+            <div class="col-12 col-md-3 text-center text-md-right">
+              <a class="btn btn-lg btn-round btn-success" href="https://api.whatsapp.com/send?phone=6281559591946&text=Halo%20Saya%20Ingin%20Menginfokan%20Kuliner">Infokan<i class="ti-arrow-right fs-9 ml-8"></i></a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+{% endblock %}
