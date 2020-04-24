@@ -324,7 +324,6 @@ def feed(request):
         'likecount').order_by('-id').all()
     paginator = Paginator(qs, 9)
     if request.method == 'GET':
-        # if request.is_ajax():
         if request.GET.get('page_number'):
             page_number = request.GET.get('page_number')
             try:
@@ -354,13 +353,18 @@ def feed(request):
 
 
 @after_response.enable
-def fetch_instagram():
-    if scrapper.InstagramAll().send():
-        if scrapper.ExtractorDB().send():
+def fetch_all_data():
+    if scrapper.CollectData().send():
+        if scrapper.InstagramExtraction().send():
             return True
-    else:
-        return False
+    return False
 
+@after_response.enable
+def fetch_like_comment():
+    if scrapper.CollectData().send():
+        if scrapper.UpdateLikeAndComment().send():
+            return True
+    return False
 
 def andreyongz(request):
     get_data = CulinaryPlace.objects.values("name").distinct().all()
@@ -376,14 +380,14 @@ def andreyongz(request):
 
 def getculinary(request):
     if request.GET:
-        fetch_instagram.after_response()
+        fetch_all_data.after_response()
         return HttpResponse('true')
     return HttpResponse('true')
 
 
 def getrating(request):
     if request.GET:
-        FetchIgRating.delay()
+        fetch_like_comment.after_response()
         return HttpResponse('true')
     return HttpResponse('true')
 

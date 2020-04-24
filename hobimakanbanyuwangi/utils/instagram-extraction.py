@@ -1,26 +1,30 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
-from django.core.wsgi import get_wsgi_application
-import os
-os.environ['DJANGO_SETTINGS_MODULE'] = 'config.settings.local'
-application = get_wsgi_application()
-
-from urllib.parse import urljoin
-import urllib.parse
-from django.core.files.uploadedfile import InMemoryUploadedFile
-import urllib
-from io import BytesIO
-from io import StringIO
-import unicodedata
-import simplejson
-import uuid
-import string
-import random
-import re
-from culinary.models import *
 from urllib.parse import urlparse
+import re
+import random
+import string
+import uuid
+import simplejson
+import unicodedata
+from io import StringIO
+from io import BytesIO
+import urllib.request
+from django.core.files.uploadedfile import InMemoryUploadedFile
+import urllib.parse
+from urllib.parse import urljoin
+import django
+import sys
+import os
 
+from pathlib import Path
+BASE_DIR = Path.cwd()
+SCRIPT_PATH = str(BASE_DIR / Path(__file__).parents[0])
+sys.path.append(str(BASE_DIR))
+django.setup()
+
+from culinary.models import *
 
 
 def key_generator(limit=10):
@@ -64,9 +68,9 @@ def grab_image(url):
 
 
 def main():
-    get_data = open('data/hobimakan.banyuwangi.json').read()
+    get_data = open(f'{SCRIPT_PATH}/data/hobimakan.banyuwangi.json').read()
     data = simplejson.loads(get_data)
-    sort = {"items": sorted(data["GraphImages"], key=lambda d: d["id"])}
+    sort = {"items": sorted(data["GraphImages"], key=lambda d: d["taken_at_timestamp"])}
     # data.reverse()
     post = []
     for i in sort["items"]:
@@ -75,46 +79,36 @@ def main():
             caption = i['edge_media_to_caption']['edges'][0]['node']['text']
             cap = unicodedata.normalize('NFKD', caption)
             cap = replace_text(cap)
-            name = re.search('(.*)[\n]Address:', cap).group(1)
+            name = re.search('(.*)[\n]Address:', cap)
+            # some place doesn't have address but start with priceinfo
+            if not name:
+                name = re.search('(.*)[\n]PriceInfo:', cap)
+
             if name:
                 try:
                     post = CulinaryPlace.objects.get(unique_id=unique_id)
                 except BaseException:
                     post = CulinaryPlace(
                         unique_id=unique_id,
-                        name=name,
+                        name=name.group(1),
                     )
                     post.save()
 
                     post.description = cap
                     post.save()
 
-                    is_video = i['is_video']
                     graph_type = i['__typename']
 
                     post.shortcode = i['shortcode']
                     post.typename = graph_type
                     post.save()
 
-                    urls = None
-                    watchcount = 0
-
-                    like_count = i['edge_media_preview_like']['count']
-                    comment_count = i['edge_media_to_comment']['count']
-                    post.cmcount = int(comment_count)
-                    post.likecount = int(like_count)
-                    post.watchcount = int(watchcount)
-                    post.save()
-
+                    urls = i.get("urls", None)
                     tags = i['tags']
                     if tags:
                         for x in tags:
                             post.tags.add(x)
                             post.save()
-
-                    urls = i['urls']  # video
-                    if is_video == "true":
-                        watchcount = i['video_view_count']
 
                     if urls:
                         c = 0
@@ -178,6 +172,17 @@ def main():
                     if lat_lang:
                         post.lat_lang = lat_lang.group(1)
                         post.save()
+
+                watchcount = 0
+                is_video = i.get("is_video", False)
+                like_count = i['edge_media_preview_like']['count']
+                comment_count = i['edge_media_to_comment']['count']
+                post.cmcount = int(comment_count)
+                post.likecount = int(like_count)
+                if is_video:
+                    watchcount = i['video_view_count']
+                post.watchcount = int(watchcount)
+                post.save()
 
         except Exception as e:
             print("https://www.instagram.com/p/" + i["shortcode"])
