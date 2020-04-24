@@ -359,12 +359,14 @@ def fetch_all_data():
             return True
     return False
 
+
 @after_response.enable
 def fetch_like_comment():
     if scrapper.CollectData().send():
         if scrapper.UpdateLikeAndComment().send():
             return True
     return False
+
 
 def andreyongz(request):
     get_data = CulinaryPlace.objects.values("name").distinct().all()
@@ -382,14 +384,12 @@ def getculinary(request):
     if request.GET:
         fetch_all_data.after_response()
         return HttpResponse('true')
-    return HttpResponse('true')
 
 
 def getrating(request):
     if request.GET:
         fetch_like_comment.after_response()
         return HttpResponse('true')
-    return HttpResponse('true')
 
 
 def detail(request, slug):
