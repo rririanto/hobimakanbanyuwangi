@@ -9,7 +9,6 @@ ROOT_DIR = Path(__file__).parents[2]
 APPS_DIR = ROOT_DIR / "hobimakanbanyuwangi"
 env = environ.Env()
 env.read_env()
-print (env.db("DATABASE_URL"))
 
 # GENERAL
 # ------------------------------------------------------------------------------
