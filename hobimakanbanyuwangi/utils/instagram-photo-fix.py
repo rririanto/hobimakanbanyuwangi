@@ -22,6 +22,7 @@ from pathlib import Path
 BASE_DIR = Path.cwd()
 SCRIPT_PATH = str(BASE_DIR / Path(__file__).parents[0])
 sys.path.append(str(BASE_DIR))
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.local')
 django.setup()
 from culinary.models import *
 
