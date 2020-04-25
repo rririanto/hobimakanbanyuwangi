@@ -1,12 +1,12 @@
 # hobimakanbanyuwangi
-Web that make you easily do culinary activities in Banyuwangi.
+Web that makes you experience culinary activities easily in Banyuwangi.
 The idea started when I was in Banyuwangi city for the first time and was trying to do culinary activities. 
-1. Most of restaurant or cafe not available in Google maps especially popular street food.
-2. There's alot instagram account about Banyuwangi culinary on Instagram but they don't provide you a google maps point, only an address. So most of their followers also face difficult situation to find the location as well as me who just lived in the city.
+1. Most of the restaurants or cafe's were not available on Google maps, especially popular street food.
+2. There's a lot of instagram accounts about Banyuwangi culinary on Instagram but they don't provide you a google maps point, only an address. So most of their followers also faced difficulty in finding the location just like me who moved to the city recently.
 
-So, I did small research to find best & popular instagram Banyuwangi culinary account and found [@hobimakan.banyuwangi](https://www.instagram.com/hobimakan.banyuwangi/). I contact the admin to have a cup of coffee and we end up with collaboration. I make [@hobimakan.banyuwangi](https://hobimakanbanyuwangi) website with 3 solution: Find, Get the maps, and see what popular based by ratings and like on Instagram. And I also come up with simple web solution since the admin never had an experience to manage a website:
+So, I did a small research to find the best & popular Banyuwangi culinary instagram account and found [@hobimakan.banyuwangi](https://www.instagram.com/hobimakan.banyuwangi/). I contacted the admin to have a cup of coffee and we ended up with a collaboration. I made [@hobimakan.banyuwangi](https://hobimakanbanyuwangi) website with 3 solutions: Find, Get the maps, and see what popular based by ratings and likes on Instagram. And I also came up with a simple web solution since the admin never had any experience in managing a website:
 
-- Admin just need to post on Instagram, open [this url](https://hobimakanbanyuwangi.com/andreyongz) and click update button and the scraper will run and replace the following format and save it into database automatically, no need to reinput the data on the website which is waste a time:
+- The Admin only need to post on Instagram, open [this url](https://hobimakanbanyuwangi.com/andreyongz) and click update button and the scraper will run and replace the following format and save it into database automatically, no need to reinput the data on the website which is a waste of time:
 
 ```sh
 def replace_text(capt):
