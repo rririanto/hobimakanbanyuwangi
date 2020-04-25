@@ -59,8 +59,7 @@ def search(request):
     objects = []
     if keyword:
         keyword = unicodedata.normalize(
-            'NFKD', unicode(keyword)).encode(
-            'ascii', 'ignore').lower()
+            'NFKD', str(keyword)).lower()
         entry_query = get_query(keyword, ['name'])
         entry_query2 = get_query(keyword, ['description'])
         entry_query3 = get_query(keyword, ['tags__name'])
