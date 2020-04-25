@@ -115,7 +115,7 @@ def main():
                         c = 0
                         for x in urls:
                             if c == 0:
-                                post.photo = grab_image(x)
+                                post.photo = grab_image(i["display_url"])
                                 post.save()
                                 c += 1
                             else:
