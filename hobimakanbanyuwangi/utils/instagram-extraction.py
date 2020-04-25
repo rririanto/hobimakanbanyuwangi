@@ -136,42 +136,44 @@ def main():
                     hours = re.search('Hours:(.*)\n', cap)
                     price_info = re.search('PriceInfo:(.*)\n', cap)
                     ratings = re.search('Ratings:(.*)\n', cap)
+                    if not ratings:
+                       #admin forgot to use same icons 
+                       capr = cap.replace("⭐", "Ratings2:")
+                       capr = re.search("Ratings2:(.*)\n", capr)
+                       #check if ratings is really available
+                       if capr:
+                           ratings = capr.group(1)
+
                     igaccount = re.search('InstagramAccount:(.*)\n', cap)
                     tlp = re.search('Telephone:(.*)\n', cap)
                     lat_lang = re.search('LatLang:(.*)\n', cap)
 
                     if addr:
-                        post.address = addr.group(1)
+                        post.address = addr.group(1).lstrip()
                         post.save()
 
                     if hours:
-                        post.hours = hours.group(1)
+                        post.hours = hours.group(1).lstrip()
                         post.save()
 
                     if price_info:
-                        post.priceinfo = price_info.group(1)
+                        post.priceinfo = price_info.group(1).lstrip()
                         post.save()
 
                     if ratings:
                         post.ratings = ratings.group(1)
                         post.save()
 
-                    if not ratings:
-                        capr = cap.replace("⭐", "Ratings2:")
-                        capr = re.search("Ratings2:(.*)\n", capr)
-                        post.ratings = capr.group(1)
-                        post.save()
-
                     if igaccount:
-                        post.igaccount = igaccount.group(1)
+                        post.igaccount = igaccount.group(1).lstrip()
                         post.save()
 
                     if tlp:
-                        post.phone = tlp.group(1)
+                        post.phone = ''.join(tlp.group(1).split())
                         post.save()
 
                     if lat_lang:
-                        post.lat_lang = lat_lang.group(1)
+                        post.lat_lang = lat_lang.group(1).replace("+", "-")
                         post.save()
 
                 watchcount = 0
