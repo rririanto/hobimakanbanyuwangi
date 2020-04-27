@@ -32,7 +32,7 @@ def replace_text(capt):
 
 [4. Simple Search Query Strings in Django](https://github.com/jimmyromanticdevil/hobimakanbanyuwangi/blob/master/main/views.py#L55) 
 
-[5. Optimize image on the fly with thumbnails generator](https://github.com/jimmyromanticdevil/hobimakanbanyuwangi/blob/master/main/views.py#L55) 
+[5. Optimize image on the fly with thumbnails generator](https://github.com/jimmyromanticdevil/hobimakanbanyuwangi/blob/master/hobimakanbanyuwangi/templates/main/index.html#L35) 
 using [sorl-thumbnail](https://github.com/jazzband/sorl-thumbnail)
 
 ## Base Requirements
